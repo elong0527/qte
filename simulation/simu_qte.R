@@ -26,10 +26,11 @@ truncation <- 1                                             # Truncation time / 
 db_full <- data.frame(x, a, y_0, y_1, time_0, time_1, censor)
 db_obs  <- data.frame(x, a) %>% mutate(
                                   event_time = ifelse(a == 0, time_0, time_1),
-                                  obs_time = pmin(event_time, pmin(censor, truncation)),
+                                  censor_time = censor,
+                                  obs_time = pmin(event_time, censor),
                                   status = event_time < censor,
                                   y_all = ifelse(a == 0, y_0, y_1),
-                                  y_obs = ifelse(obs_time == truncation, y_all, NA)
+                                  y_obs = ifelse(obs_time >= truncation, y_all, NA)
                                   )
 fit_propensity <- glm(a ~ x, family = "binomial", data = db_obs)
 score <- predict(fit_propensity, type = "response")    # propensity score
@@ -47,15 +48,19 @@ library(survival)
 db <- subset(db_obs, a == 0)
 # Censoring K-M Estimator
 fit_km_censor <- survfit(Surv(obs_time, 1 - status) ~ 1, data = db)
-db$km <- stepfun(fit_km_censor$time, c(1, fit_km_censor$surv))(db$obs_time)
+db$km <- stepfun(fit_km_censor$time, c(1, fit_km_censor$surv))(pmin(db$obs_time, truncation))
 
 fit_lm <- lm(y_all ~ x, data = db)
 db$y_mean <- predict(fit_lm)
 db$y_sigma <- summary(fit_lm)$sigma
 
+fit_lm_obs <- lm(y_obs ~ x, data = db)
+db$y_mean_obs  <- predict(fit_lm_obs, newdata = db)
+db$y_sigma_obs <- summary(fit_lm_obs)$sigma
+
 # Formula (1) in Section 3.1
 # Based on outcome with no missing value
-# Not fesible with censoring
+# Not feasible with censoring
 G1_fun <- function(q, xi){
   y_std <- (q -  db$y_mean)/ db$y_sigma
   f_q <- pnorm(y_std)
@@ -66,11 +71,11 @@ G1_fun <- function(q, xi){
 
 # Formula (5) in Section 3.2
 G2_fun <- function(q, xi){
-  y_std <- (q - predict(fit_lm)) / summary(fit_lm)$sigma
+  y_std <- (q - db$y_mean_obs) / db$y_sigma_obs
   f_q <- pnorm(y_std)
   term1 <- f_q - xi
-  term2 <- ( (db$y_all < q) - f_q ) / db$score
-  mean( (term1 + term2) * db$status / K )
+  term2 <- ( (db$y_obs < q) - f_q ) / db$score
+  mean( (term1 + term2) / db$km, na.rm = TRUE )
 }
 
 uniroot(G1_fun, interval = c(-5, 5), xi = 0.5)$root
