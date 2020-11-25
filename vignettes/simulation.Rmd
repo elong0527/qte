@@ -1,0 +1,86 @@
+---
+title: "simulation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{simulation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+load("../simulation/simu_qte.Rdata")
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Simulation Setup 
+
+We conducted simulation studies to verify the validity of the proposed IPW and AIPW estimators. 
+
+Simulation set up 
+
+- Sample size per group: `n = 200`
+- Analysis time $L = 1$
+- Covariates $X$ is generated from $\mathcal{N}(\mu_a, 1)$, where $\mu_0 = 0$ and $\mu_1 = 0.5$. 
+- Outcome $Y$ is generated from $\mathcal{N}(\eta_a, 1)$, where $\eta_0 = 0.6$ and $\eta_1 = 0.1$
+- Death indicator $D$ is derived by outcome $Y$ such that $D = I(Y < y_0)$, we select $y_0 = - 0.5$ 
+  that result in approximately 10% of death in the simulated data. 
+  - In reality, we will not observe those outcome $Y$ less than $y_0$
+  - This is to mimic the assumption that those missing data due to death are worst outcome. 
+- Death time: 
+  - if $Y < y_0$, the event time $T$ is generated from a uniform distribution $Unif[0,L]$
+  - if $Y \ge y_0$, the event time $T$ is generated from a scaled exponential distribution $L + exp(5)$ when $a=0$ and $L+exp(3)$ when $a=1$
+- Censoring time:
+  - censoring time $C$ is generated from an exponential distribution $L + exp(5)$
+- Observed time: $U = T \wedge C$
+- Event indicator: $\delta = T < C$
+- Observed Outcome $Y$ is observed if
+  - subject is alive at the analysis time $L$ and not censored.
+  
+  
+## Example of simulated data
+```{r, message = FALSE}
+head(db) %>% select(a, x, y, y_obs, event_time, censor_time, obs_time, status, analysis_time) %>% 
+             knitr::kable(digits = 3)
+```
+
+## Model Estimation
+
+The calculation is within each treatment group
+
+1. Propensity score: Fit a logistic model: `glm(a ~ x, family = "binomial", data = db)`
+1. IPW weight $\pi$:  KM estimator for censoring time: `survfit(Surv(obs_time, 1 - status) ~ 1, data = db)` and calculate the probability at the minimal of `obs_time` and `analysis_time`
+1. $F(y\mid x; \theta)$
+  - Fit a linear model based on observed outcome `lm(y_obs ~ x, data = db)`
+  - Calculate the scaled CDF for `f_q`
+  
+```{r, eval = FALSE}
+db$y_mean  <- predict(fit_lm_obs, newdata = db)
+db$y_sigma <- summary(fit_lm_obs)$sigma
+y_std <- (q -  db$y_mean)/ db$y_sigma
+f_q <- pmax(db$rho, pnorm(y_std))
+```
+
+1. $R$: `(obs_time > analysis_time) | (obs_time <= analysis_time & status = TRUE)`
+
+## Simulation Results
+
+- `rho`: Probability subject is dead
+- `pct_missing_death`: Percent of subject dead on orbefore analysis time $L$
+- `pct_missing_censor`: Percent of subject censored on or before analysis time $L$
+- `quantile_all`: quantile ($\xi=0.5$) based on all simulated data (underline truth)
+- `quantile_obs`: quantile ($\xi=0.5$) based on all observed data
+  - it is expected to over estimate the quantile 
+- `ipw`: results from formula (5)
+- `aipw`: results from formula (6)
+
+```{r}
+t1 %>% select(- naive) %>% knitr::kable(digits = 3)
+```
+

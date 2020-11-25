@@ -13,7 +13,7 @@ library(dplyr)
 # task_id <- 1
 set.seed(task_id)
 
-n <- 100                                                    # Sample size per group
+n <- 200                                                    # Sample size per group
 a <- rep(c(0,1), each = n)                                  # Treatment group (balanced design)
 x <- 0.5 * a + rnorm(2 * n)                                 # Covariate for propensity score
 
@@ -60,8 +60,8 @@ db_summary <- db %>% mutate(group = as.character(a)) %>%
        group_by(group) %>%
        summarise(group = unique(as.character(a)),
                  rho = sum(y_star) / n,
-                 pct_missing_death  = mean(is.na(y_obs) & status),
-                 pct_missing_censor = mean(is.na(y_obs) & (! status)) )
+                 pct_missing_death  = mean(is.na(y_obs) & status) * 100,
+                 pct_missing_censor = mean(is.na(y_obs) & (! status)) * 100 )
 #############################################
 # Modeling
 #############################################
@@ -153,7 +153,25 @@ save(res, db, file = filename)
 
 # cd /SFS/scratch/zhanyilo/qte
 # rm *
-# cp ~/qte/simulation/*.R .
-# module add R/4.0.2
-# qsub -t 1:2 ~/runr.sh simu_qte.R
+# qsub -t 1:1000 ~/runr.sh ~/qte/simulation/simu_qte.R
 
+#----------------------
+# Simulate Summary
+#----------------------
+# library(dplyr)
+#
+# path <- "/SFS/scratch/zhanyilo/qte"
+#
+# result <- list()
+# for(i in 1:1000){
+#   load(file.path(path, paste0(i, ".Rdata")))
+#   try(
+#     result[[i]] <- res
+#   )
+# }
+#
+# result <- bind_rows(result)
+#
+# t1 <- result %>% group_by(group) %>%
+#                  summarise_all(mean)
+# save(db, t1, file = "simulation/simu_qte.Rdata")
