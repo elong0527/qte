@@ -4,6 +4,10 @@
 
 task_id <- as.integer(Sys.getenv("SGE_TASK_ID"))
 
+# Load Library
+library(survival)
+library(dplyr)
+
 # Set up Simulation Environment
 
 # task_id <- 1
@@ -61,7 +65,6 @@ db_summary <- db %>% mutate(group = as.character(a)) %>%
 #############################################
 # Modeling
 #############################################
-library(survival)
 
 # based on observed data only (remove death as well)
 est_fun1 <- function(q, xi, db){
@@ -143,3 +146,14 @@ res <- right_join(db_summary, res)
 # Save Simulation Results
 filename <- paste0(task_id,".Rdata")
 save(res, db, file = filename)
+
+#----------------------
+# HPC code Submission
+#----------------------
+
+# cd /SFS/scratch/zhanyilo/qte
+# rm *
+# cp ~/qte/simulation/*.R .
+# module add R/4.0.2
+# qsub -t 1:2 ~/runr.sh simu_qte.R
+
