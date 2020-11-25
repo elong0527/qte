@@ -1,15 +1,13 @@
 Package: qte
-Title: What the Package Does (One Line, Title Case)
+Title: Quantile Treatment Effects under Censoring and Truncation by Death
 Version: 0.0.1
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Yilong",
+           family = "Zhang",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
+           email = "yilong.zhang@merck.com")
+Description: Quantile Treatment Effects under Censoring and Truncation by Death.
+License: GPL3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
