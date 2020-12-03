@@ -28,11 +28,11 @@ Simulation set up
 - Total sample size: `n = 400`
 - Analysis time $L = 1$
 - Covariates $X$ is generated from $\mathcal{N}(0.5, 1)$
-- Treatment group $A ~ Bernoulli(p)$, where $p=logit^{-1}(-0.25 + 0.5 * x)$ such that the randomization ratio is close to 1:1. 
+- Treatment group $A$ is generated from $Bernoulli(p)$, where $p=logit^{-1}(-0.25 + 0.5 * x)$ such that the randomization ratio is close to 1:1. 
   + Yilong: in clinical trial, we typically use block randomization, so it shall have lower variability than this setup. 
 - Outcome $Y$ is generated from $\mathcal{N}(\eta, 1)$, where $\eta =  0.2 + 0.8 * A$.
-- Death time: $T ~ \exp(\lambda)$, where $\lambda = exp(-2 + 0.5 * X)$ (for a simple Cox PH model)
-- Censoring time: $C ~ \exp(0.2)$
+- Death time: $T \sim \exp(\lambda)$, where $\lambda = exp(-2 + 0.5 * X)$ (for a simple Cox PH model)
+- Censoring time: $C \sim \exp(0.2)$
 - Observed time: $U = T \wedge C$
 - Event indicator: $\delta = T < C$
 
