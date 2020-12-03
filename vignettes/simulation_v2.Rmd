@@ -1,8 +1,8 @@
 ---
-title: "simulation"
+title: "simulation-v2"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{simulation}
+  %\VignetteIndexEntry{simulation-v2}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
