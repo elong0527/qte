@@ -1,0 +1,86 @@
+---
+title: "simulation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{simulation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+load("../simulation/simu_qte_v2.Rdata")
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Simulation Setup 
+
+We conducted simulation studies to verify the validity of the proposed IPW and AIPW estimators. 
+
+Simulation set up 
+
+- Total sample size: `n = 400`
+- Analysis time $L = 1$
+- Covariates $X$ is generated from $\mathcal{N}(0.5, 1)$
+- Treatment group $A ~ Bernoulli(p)$, where $p=logit^{-1}(-0.25 + 0.5 * x)$ such that the randomization ratio is close to 1:1. 
+  + Yilong: in clinical trial, we typically use block randomization, so it shall have lower variability than this setup. 
+- Outcome $Y$ is generated from $\mathcal{N}(\eta, 1)$, where $\eta =  0.2 + 0.8 * A$.
+- Death time: $T ~ \exp(\lambda)$, where $\lambda = exp(-2 + 0.5 * X)$ (for a simple Cox PH model)
+- Censoring time: $C ~ \exp(0.2)$
+- Observed time: $U = T \wedge C$
+- Event indicator: $\delta = T < C$
+
+- Missing data: `y_obs` in simulated data
+  - $Y$ is missing if $U < L$
+  - we summarize the missing data proportion based on the event indicator. 
+- Actual data: the underline true value of `y_actual` in simulated data 
+  - `y_actual` = $\min(y) - 1$ if $T < L$    
+
+## Example of simulated data
+```{r, message = FALSE}
+head(db) %>% select(a, x, y, y_obs, y_actual, event_time, censor_time, obs_time, status, analysis_time) %>% 
+             knitr::kable(digits = 3)
+```
+
+## Model Estimation
+
+The calculation is within each treatment group
+
+1. Propensity score: Fit a logistic model: `glm(a ~ x, family = "binomial", data = db)`
+1. IPW weight $\pi$: Coxph model: `oxph(Surv(obs_time, 1 - status) ~ x, data = db)` and calculate the probability at the minimal of `obs_time` and `analysis_time`
+1. $F(y\mid x; \theta)$
+  - Fit a linear model based on observed outcome `lm(y_obs ~ x, data = db)`
+  - Calculate the scaled CDF for `f_q`
+  
+```{r, eval = FALSE}
+db$y_mean  <- predict(fit_lm_obs, newdata = db)
+db$y_sigma <- summary(fit_lm_obs)$sigma
+y_std <- (q -  db$y_mean)/ db$y_sigma
+f_q <- pmax(db$rho, pnorm(y_std))
+```
+
+1. $R$: `(obs_time > analysis_time) | (obs_time <= analysis_time & status = TRUE)`
+
+## Simulation Results
+
+- `n`: sample size in each group
+- `rho`: Probability subject is dead
+- `pct_missing_death`: Percent of subject dead on orbefore analysis time $L$
+- `pct_missing_censor`: Percent of subject censored on or before analysis time $L$
+- `quantile_y`: quantile ($\xi=0.5$) based on simulated data $Y$. 
+- `quantile_actual`: quantile ($\xi=0.5$) based on actual data `y_actual` (underline truth)
+- `quantile_obs`: quantile ($\xi=0.5$) based on all observed data
+  - it is expected to over estimate the quantile 
+- `ipw`: results from formula (5)
+- `aipw`: results from formula (6)
+
+```{r}
+t1 %>% select(- naive) %>% knitr::kable(digits = 3)
+```
+
