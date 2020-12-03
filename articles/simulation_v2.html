@@ -99,14 +99,14 @@
 <li><p>Analysis time <span class="math inline">\(L = 1\)</span></p></li>
 <li><p>Covariates <span class="math inline">\(X\)</span> is generated from <span class="math inline">\(\mathcal{N}(0.5, 1)\)</span></p></li>
 <li>
-<p>Treatment group <span class="math inline">\(A ~ Bernoulli(p)\)</span>, where <span class="math inline">\(p=logit^{-1}(-0.25 + 0.5 * x)\)</span> such that the randomization ratio is close to 1:1.</p>
+<p>Treatment group <span class="math inline">\(A\)</span> is generated from <span class="math inline">\(Bernoulli(p)\)</span>, where <span class="math inline">\(p=logit^{-1}(-0.25 + 0.5 * x)\)</span> such that the randomization ratio is close to 1:1.</p>
 <ul>
 <li>Yilong: in clinical trial, we typically use block randomization, so it shall have lower variability than this setup.</li>
 </ul>
 </li>
 <li><p>Outcome <span class="math inline">\(Y\)</span> is generated from <span class="math inline">\(\mathcal{N}(\eta, 1)\)</span>, where <span class="math inline">\(\eta = 0.2 + 0.8 * A\)</span>.</p></li>
-<li><p>Death time: <span class="math inline">\(T ~ \exp(\lambda)\)</span>, where <span class="math inline">\(\lambda = exp(-2 + 0.5 * X)\)</span> (for a simple Cox PH model)</p></li>
-<li><p>Censoring time: <span class="math inline">\(C ~ \exp(0.2)\)</span></p></li>
+<li><p>Death time: <span class="math inline">\(T \sim \exp(\lambda)\)</span>, where <span class="math inline">\(\lambda = exp(-2 + 0.5 * X)\)</span> (for a simple Cox PH model)</p></li>
+<li><p>Censoring time: <span class="math inline">\(C \sim \exp(0.2)\)</span></p></li>
 <li><p>Observed time: <span class="math inline">\(U = T \wedge C\)</span></p></li>
 <li><p>Event indicator: <span class="math inline">\(\delta = T &lt; C\)</span></p></li>
 <li>
