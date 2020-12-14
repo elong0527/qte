@@ -35,6 +35,7 @@ summary(event_time)
 
 # Censoring time
 censor_time <- rexp(n, 0.2)
+# censor_time <- rep(max(event_time) + 1, n)
 
 # Observed time
 obs_time = pmin(event_time, censor_time)
@@ -60,13 +61,15 @@ db$score <- score
 db <- db %>% group_by(a) %>%
              mutate(
                y_star = is.na(y_obs) & status, # Subject died with missing value
-               rho = sum(y_star) / n)
+               rho = sum(y_star) / n())
+db <- ungroup(db)
 
 db_summary <- db %>% mutate(group = as.character(a)) %>%
        group_by(group) %>%
        summarise(n = n(),
                  group = unique(as.character(a)),
-                 rho = sum(y_star) / n,
+                 rho = sum(y_star) / n(),
+                 pct_missing = mean(is.na(y_obs)),
                  pct_missing_death  = mean(is.na(y_obs) & status) * 100,
                  pct_missing_censor = mean(is.na(y_obs) & (! status)) * 100 )
 
@@ -87,10 +90,10 @@ est_fun1 <- function(q, xi, db){
 # Formula (5)
 est_fun2 <- function(q, xi,  db){
   y_std <- (q -  db$y_mean)/ db$y_sigma
-  f_q <- pmax(db$rho, pnorm(y_std))
+  f_q <- db$rho + (1 - db$rho) * pnorm(y_std)
   # f_q <- pnorm(y_std)
 
-  r <- db$obs_time > db$analysis_time | (db$obs_time <= db$analysis_time & db$status)
+  r <- (db$obs_time > db$analysis_time) | (db$obs_time <= db$analysis_time & db$status)
   term1 <- f_q - xi                                   # F(q) - q
   term2 <- ifelse(is.na(db$y_obs), 1, db$y_obs <= q)  # I(Y<=q)
   term2 <- db$y_obs <= q
@@ -105,7 +108,7 @@ est_fun2 <- function(q, xi,  db){
 # Formula (6)
 est_fun3 <- function(q, xi,  db){
   y_std <- (q -  db$y_mean)/ db$y_sigma
-  f_q <- pmax(db$rho, pnorm(y_std))
+  f_q <- db$rho + (1 - db$rho) * pnorm(y_std)
 
   r <- db$obs_time > db$analysis_time | (db$obs_time <= db$analysis_time & db$status)
   term1 <- f_q - xi                                   # F(q) - q
@@ -130,6 +133,7 @@ qte <- function(db, xi){
   newdata <- data.frame(obs_time = pmin(db$obs_time, db$analysis_time), status = db$status, x = db$x)
   db$km <- survival:::predict.coxph(fit_km_censor, newdata = newdata, type = "survival")
 
+  db$km[is.na(db$km)] <- 1
   # Fit a parametric model
   fit_lm_obs <- lm(y_obs ~ x, data = db)
   db$y_mean  <- predict(fit_lm_obs, newdata = db)
