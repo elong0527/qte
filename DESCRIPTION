@@ -17,5 +17,6 @@ Imports:
     survival
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    devtools
 VignetteBuilder: knitr
