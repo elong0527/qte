@@ -25,17 +25,15 @@ set.seed(task_id)
 # }
 
 # Add propensity score
-est_fun <- function(q, xi, db, use_propensity = TRUE, use_km = TRUE, km_rho = FALSE, type = c("ipw", "aipw")){
+est_fun <- function(q, xi, db, use_propensity = TRUE, use_km = TRUE, km_rho = c("rho", "rho_km", "rho_km_simple"), type = c("ipw", "aipw")){
 
   type <- match.arg(type, c("ipw", "aipw"))
+  km_rho <- match.arg(km_rho, c("rho", "rho_km", "rho_km_simple"))
 
   y_std <- (q - db$y_mean) / db$y_sigma
 
-  if(km_rho){
-    rho <- db$rho_km
-  }else{
-    rho <- db$rho
-  }
+  rho <- db[[km_rho]]
+
   f_q <- rho + (1 - rho) * pnorm(y_std)
 
   term <- f_q - xi
@@ -166,10 +164,17 @@ for(i in 1:1){
                  newdata <- data.frame(obs_time = pmin(tmp$obs_time, tmp$analysis_time), status = tmp$status, x = tmp$x)
                  km <- survival:::predict.coxph(fit_km_censor, newdata = newdata, type = "survival")
 
+                 # Surv from Cox model
                  fit_km <- coxph(Surv(obs_time, status) ~ x, data = tmp)
                  newdata_rho <- data.frame(obs_time = tmp$analysis_time, status = tmp$status, x = tmp$x)
                  rho_km <- 1 - survival:::predict.coxph(fit_km, newdata = newdata_rho, type = "survival")
-                 data.frame(., km, rho_km)
+
+                 # Surv from KM estimator
+                 fit_km <- survfit(Surv(obs_time, status) ~ 1, data = tmp)
+                 surv   <- data.frame(time = fit_km$time, surv = fit_km$surv)
+                 rho_km_simple <- 1 - tail(subset(surv, time < 1)$surv, 1)
+
+                 data.frame(., km, rho_km, rho_km_simple)
                })
 
 
@@ -180,13 +185,13 @@ for(i in 1:1){
   par1 <- expand.grid(xi = 0.5,
                      use_propensity = c(TRUE, FALSE),
                      use_km = c(TRUE, FALSE),
-                     km_rho = c(TRUE, FALSE),
+                     km_rho = c("rho", "rho_km", "rho_km_simple"),
                      type = c("ipw"), stringsAsFactors = FALSE)
 
   par2 <- expand.grid(xi = 0.5,
                       use_propensity = c(TRUE),
                       use_km = c(TRUE),
-                      km_rho = c(TRUE, FALSE),
+                      km_rho = c("rho", "rho_km", "rho_km_simple"),
                       type = c("aipw"), stringsAsFactors = FALSE)
 
   par <- subset(bind_rows(par1, par2), ! (use_propensity & ! use_km))
@@ -219,7 +224,7 @@ save(res, truth, file = filename)
 # HPC code Submission
 #----------------------
 
-# cd /SFS/scratch/zhanyilo/qte
+# cd /SFS/scratch/zhanyilo/qte2
 # module add R/4.0.2
 # rm *
 # qsub -t 1:1000 ~/runr.sh ~/qte/simulation/simu_qte_v3.R
@@ -227,12 +232,9 @@ save(res, truth, file = filename)
 #----------------------
 # Simulate Summary
 #----------------------
-#----------------------
-# Simulate Summary
-#----------------------
 library(dplyr)
 
-path <- "/SFS/scratch/zhanyilo/qte/"
+path <- "/SFS/scratch/zhanyilo/qte2/"
 
 result <- list()
 result_truth <- list()
@@ -260,20 +262,6 @@ res_summary <- bind_rows(result ) %>% group_by(xi, use_propensity, use_km, km_rh
                              diff = mean(diff), diff_true = truth_est$diff, diff_rmse = sqrt(mean(diff - truth_est$diff)^2))
 
 res_summary
-#
-#
-#
-# t1 <- result %>% group_by(group) %>%
-#                  summarise_all(mean)
-# save(db, t1, file = "simulation/simu_qte_v2.Rdata")
 
-# res_summary <- bind_rows(res) %>% group_by(xi, use_propensity, use_km, km_rho, type) %>%
-#                    summarise_all(mean)
-#
-# truth_summary <- bind_rows(truth) %>% group_by(a, xi) %>%
-#                      summarise_all(mean)
-#
-#
-# res_summary
-# truth_summary
+save(db, res_summary, truth_summary, file = "simulation/simu_qte_v3.Rdata")
 
