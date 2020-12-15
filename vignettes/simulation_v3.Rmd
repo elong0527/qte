@@ -1,8 +1,10 @@
 ---
 title: "simulation-v3"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{simulation-v2}
+output:
+  rmarkdown::html_document: default
+  rmarkdown::html_vignette: default
+vignette: |
+  %\VignetteIndexEntry{simulation-v2} 
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -55,6 +57,15 @@ Simulation set up
 head(db) %>% select(a, x, y, y_obs, y_actual, event_time, censor_time, obs_time, status, analysis_time) %>% 
              knitr::kable(digits = 3)
 ```
+## Method to calculate true value 
+
+The true value is estimated by `y_actual` without using propensity score and censoring adjustment. 
+
+The sample size to calculate true value is 10,000 with replication of 1,000 times.
+
+```{r}
+truth_est
+```
 
 ## Model Estimation
 
@@ -100,7 +111,17 @@ truth_summary %>% select(-q, -diff) %>% knitr::kable(digits = 1)
 - `x1`, `x1_true`: estimated or true value for the percentile in treatment group
 - `diff`, `diff_true`: estimated or true value for the percentile difference between two group
 
+### Results with observing censoring
 ```{r}
-res_summary %>% mutate_if(is.numeric, round, 3) %>% show_db()
+res_summary %>% ungroup() %>% 
+  subset(censoring) %>% 
+  mutate_if(is.numeric, round, 3)  %>% show_db()
+```
+
+### Results without observing censoring
+```{r}
+res_summary %>% ungroup() %>% 
+  subset( (!censoring) & n == 400) %>% 
+  mutate_if(is.numeric, round, 3) %>% show_db()
 ```
 
