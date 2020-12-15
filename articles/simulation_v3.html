@@ -173,78 +173,91 @@
 <tbody>
 <tr class="odd">
 <td align="right">0</td>
-<td align="right">-0.750</td>
-<td align="right">0.397</td>
-<td align="right">NA</td>
-<td align="right">0.397</td>
-<td align="right">24.863</td>
-<td align="right">0.278</td>
-<td align="right">0.278</td>
-<td align="left">FALSE</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">1.155</td>
-<td align="right">-1.656</td>
-<td align="right">-1.656</td>
-<td align="right">-1.656</td>
-<td align="right">11.685</td>
-<td align="right">1.322</td>
-<td align="right">1.322</td>
-<td align="left">FALSE</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">-1.040</td>
-<td align="right">-0.711</td>
-<td align="right">-0.711</td>
-<td align="right">-0.711</td>
-<td align="right">34.215</td>
-<td align="right">8.407</td>
-<td align="right">8.407</td>
-<td align="left">FALSE</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0.424</td>
-<td align="right">0.576</td>
-<td align="right">0.576</td>
-<td align="right">0.576</td>
-<td align="right">2.906</td>
-<td align="right">18.210</td>
-<td align="right">2.906</td>
-<td align="left">TRUE</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">-1.192</td>
-<td align="right">0.728</td>
-<td align="right">0.728</td>
-<td align="right">0.728</td>
-<td align="right">1.144</td>
-<td align="right">20.331</td>
-<td align="right">1.144</td>
+<td align="right">1.065</td>
+<td align="right">1.998</td>
+<td align="right">1.998</td>
+<td align="right">1.998</td>
+<td align="right">4.795</td>
+<td align="right">104.495</td>
+<td align="right">4.795</td>
 <td align="left">TRUE</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="right">0</td>
-<td align="right">-1.179</td>
-<td align="right">0.010</td>
-<td align="right">0.010</td>
-<td align="right">0.010</td>
-<td align="right">8.193</td>
-<td align="right">16.784</td>
-<td align="right">8.193</td>
+<td align="right">0.306</td>
+<td align="right">1.712</td>
+<td align="right">1.712</td>
+<td align="right">1.712</td>
+<td align="right">2.620</td>
+<td align="right">104.495</td>
+<td align="right">2.620</td>
+<td align="left">TRUE</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">-0.255</td>
+<td align="right">0.562</td>
+<td align="right">0.562</td>
+<td align="right">0.562</td>
+<td align="right">17.866</td>
+<td align="right">104.495</td>
+<td align="right">17.866</td>
+<td align="left">TRUE</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">2.044</td>
+<td align="right">1.028</td>
+<td align="right">1.028</td>
+<td align="right">1.028</td>
+<td align="right">1.867</td>
+<td align="right">104.495</td>
+<td align="right">1.867</td>
+<td align="left">TRUE</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">-0.375</td>
+<td align="right">0.117</td>
+<td align="right">0.117</td>
+<td align="right">0.117</td>
+<td align="right">2.258</td>
+<td align="right">104.495</td>
+<td align="right">2.258</td>
+<td align="left">TRUE</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0.980</td>
+<td align="right">0.734</td>
+<td align="right">0.734</td>
+<td align="right">0.734</td>
+<td align="right">1.074</td>
+<td align="right">104.495</td>
+<td align="right">1.074</td>
 <td align="left">TRUE</td>
 <td align="right">1</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="method-to-calculate-true-value" class="section level2">
+<h2 class="hasAnchor">
+<a href="#method-to-calculate-true-value" class="anchor"></a>Method to calculate true value</h2>
+<p>The true value is estimated by <code>y_actual</code> without using propensity score and censoring adjustment.</p>
+<p>The sample size to calculate true value is 10,000 with replication of 1,000 times.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">truth_est</span>
+<span class="co">#&gt; # A tibble: 1 x 10</span>
+<span class="co">#&gt; # Groups:   xi, use_propensity, use_km, km_rho, type, censoring [1]</span>
+<span class="co">#&gt;      xi use_propensity use_km km_rho type  censoring     n    x0    x1  diff</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;lgl&gt;          &lt;lgl&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;lgl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1   0.5 FALSE          FALSE  rho_km ipw   FALSE     10000 0.212  1.07 0.863</span></code></pre></div>
 </div>
 <div id="model-estimation" class="section level2">
 <h2 class="hasAnchor">
@@ -263,7 +276,7 @@
 <li>Calculate the scaled CDF for <code>f_q</code>
 </li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y_std</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">q</span> <span class="op">-</span> <span class="va">db</span><span class="op">$</span><span class="va">y_mean</span><span class="op">)</span> <span class="op">/</span> <span class="va">db</span><span class="op">$</span><span class="va">y_sigma</span>
 <span class="va">rho</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">rho</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">y_std</span><span class="op">)</span></code></pre></div>
 <ol style="list-style-type: decimal">
@@ -292,7 +305,7 @@
 <code>pct_missing_censor</code>: Percent of subject censored on or before analysis time <span class="math inline">\(L\)</span>
 </li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">truth_summary</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">q</span>, <span class="op">-</span><span class="va">diff</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -353,12 +366,26 @@
 <li>
 <code>diff</code>, <code>diff_true</code>: estimated or true value for the percentile difference between two group</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">res_summary</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_if</a></span><span class="op">(</span><span class="va">is.numeric</span>, <span class="va">round</span>, <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">show_db</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; `mutate_if()` ignored the following grouping variables:</span>
-<span class="co">#&gt; Columns `xi`, `use_propensity`, `use_km`, `km_rho`</span></code></pre></div>
-<div id="htmlwidget-509a460410ed1abc0040" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-509a460410ed1abc0040">{"x":{"filter":"top","filterHTML":"<tr>\n  <td><\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"logical\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;true&quot;,&quot;false&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"logical\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;true&quot;,&quot;false&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.205\" data-max=\"0.253\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.003\" data-max=\"0.036\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1.075\" data-max=\"1.146\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.005\" data-max=\"0.046\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.864\" data-max=\"0.893\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.001\" data-max=\"0.016\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12"],[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],[false,false,false,false,false,false,true,true,true,true,true,true],[false,false,false,true,true,true,true,true,true,true,true,true],["rho","rho_km","rho_km_simple","rho","rho_km","rho_km_simple","rho","rho","rho_km","rho_km","rho_km_simple","rho_km_simple"],["ipw","ipw","ipw","ipw","ipw","ipw","aipw","ipw","aipw","ipw","aipw","ipw"],[0.253,0.205,0.232,0.253,0.205,0.232,0.22,0.22,0.206,0.205,0.244,0.245],[0.241,0.241,0.241,0.241,0.241,0.241,0.241,0.241,0.241,0.241,0.241,0.241],[0.012,0.036,0.009,0.012,0.036,0.009,0.021,0.021,0.035,0.036,0.003,0.003],[1.146,1.08,1.114,1.146,1.079,1.113,1.085,1.084,1.075,1.076,1.116,1.116],[1.121,1.121,1.121,1.121,1.121,1.121,1.121,1.121,1.121,1.121,1.121,1.121],[0.025,0.042,0.008,0.025,0.042,0.008,0.037,0.038,0.046,0.046,0.006,0.005],[0.893,0.875,0.882,0.893,0.874,0.881,0.864,0.864,0.869,0.87,0.872,0.872],[0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88],[0.013,0.006,0.002,0.012,0.006,0.001,0.016,0.016,0.012,0.01,0.009,0.009]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>xi<\/th>\n      <th>use_propensity<\/th>\n      <th>use_km<\/th>\n      <th>km_rho<\/th>\n      <th>type<\/th>\n      <th>x0<\/th>\n      <th>x0_true<\/th>\n      <th>x0_rmse<\/th>\n      <th>x1<\/th>\n      <th>x1_true<\/th>\n      <th>x1_rmse<\/th>\n      <th>diff<\/th>\n      <th>diff_true<\/th>\n      <th>diff_rmse<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"autoWidth":true,"rownames":false,"dom":"Bfrtip","buttons":["colvis","excel"],"colReorder":true,"deferRender":true,"scrollX":true,"scrollY":"40vh","scroller":true,"search":{"regex":true,"caseInsensitive":false},"columnDefs":[{"className":"dt-right","targets":[1,6,7,8,9,10,11,12,13,14]},{"orderable":false,"targets":0}],"order":[],"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+<div id="results-with-observing-censoring" class="section level3">
+<h3 class="hasAnchor">
+<a href="#results-with-observing-censoring" class="anchor"></a>Results with observing censoring</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res_summary</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">censoring</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_if</a></span><span class="op">(</span><span class="va">is.numeric</span>, <span class="va">round</span>, <span class="fl">3</span><span class="op">)</span>  <span class="op">%&gt;%</span> <span class="fu">show_db</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div id="htmlwidget-5cbb3bb44d2004e98fe7" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5cbb3bb44d2004e98fe7">{"x":{"filter":"top","filterHTML":"<tr>\n  <td><\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"logical\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;true&quot;,&quot;false&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"logical\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;true&quot;,&quot;false&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.205\" data-max=\"0.253\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.005\" data-max=\"0.042\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1.075\" data-max=\"1.146\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0\" data-max=\"0.072\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.864\" data-max=\"0.893\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.001\" data-max=\"0.03\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["1","2","3","4","5","6","7","8","9","10","11","12"],[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],[false,false,false,false,false,false,true,true,true,true,true,true],[false,false,false,true,true,true,true,true,true,true,true,true],["rho","rho_km","rho_km_simple","rho","rho_km","rho_km_simple","rho","rho","rho_km","rho_km","rho_km_simple","rho_km_simple"],["ipw","ipw","ipw","ipw","ipw","ipw","aipw","ipw","aipw","ipw","aipw","ipw"],[true,true,true,true,true,true,true,true,true,true,true,true],[400,400,400,400,400,400,400,400,400,400,400,400],[0.253,0.205,0.232,0.253,0.205,0.232,0.22,0.22,0.206,0.205,0.244,0.245],[0.212,0.212,0.212,0.212,0.212,0.212,0.212,0.212,0.212,0.212,0.212,0.212],[0.042,0.006,0.02,0.042,0.006,0.02,0.009,0.008,0.005,0.006,0.032,0.033],[1.146,1.08,1.114,1.146,1.079,1.113,1.085,1.084,1.075,1.076,1.116,1.116],[1.075,1.075,1.075,1.075,1.075,1.075,1.075,1.075,1.075,1.075,1.075,1.075],[0.072,0.005,0.039,0.071,0.005,0.039,0.01,0.009,0,0.001,0.041,0.042],[0.893,0.875,0.882,0.893,0.874,0.881,0.864,0.864,0.869,0.87,0.872,0.872],[0.863,0.863,0.863,0.863,0.863,0.863,0.863,0.863,0.863,0.863,0.863,0.863],[0.03,0.011,0.019,0.03,0.011,0.018,0.001,0.001,0.006,0.007,0.009,0.009]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>xi<\/th>\n      <th>use_propensity<\/th>\n      <th>use_km<\/th>\n      <th>km_rho<\/th>\n      <th>type<\/th>\n      <th>censoring<\/th>\n      <th>n<\/th>\n      <th>x0<\/th>\n      <th>x0_true<\/th>\n      <th>x0_rmse<\/th>\n      <th>x1<\/th>\n      <th>x1_true<\/th>\n      <th>x1_rmse<\/th>\n      <th>diff<\/th>\n      <th>diff_true<\/th>\n      <th>diff_rmse<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"autoWidth":true,"rownames":false,"dom":"Bfrtip","buttons":["colvis","excel"],"colReorder":true,"deferRender":true,"scrollX":true,"scrollY":"40vh","scroller":true,"search":{"regex":true,"caseInsensitive":false},"columnDefs":[{"className":"dt-right","targets":[1,7,8,9,10,11,12,13,14,15,16]},{"orderable":false,"targets":0}],"order":[],"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="results-without-observing-censoring" class="section level3">
+<h3 class="hasAnchor">
+<a href="#results-without-observing-censoring" class="anchor"></a>Results without observing censoring</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res_summary</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span> <span class="op">(</span><span class="op">!</span><span class="va">censoring</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">n</span> <span class="op">==</span> <span class="fl">400</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_if</a></span><span class="op">(</span><span class="va">is.numeric</span>, <span class="va">round</span>, <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">show_db</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div id="htmlwidget-04d3ae74263140a42571" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-04d3ae74263140a42571">{"x":{"filter":"top","filterHTML":"<tr>\n  <td><\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"logical\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"width: 100%; display: none;\">\n      <select multiple=\"multiple\" style=\"width: 100%;\" data-options=\"[&quot;true&quot;,&quot;false&quot;]\"><\/select>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.21\" data-max=\"0.25\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.002\" data-max=\"0.038\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"1.063\" data-max=\"1.108\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.006\" data-max=\"0.033\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.853\" data-max=\"0.859\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"disabled\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"0.004\" data-max=\"0.01\" data-scale=\"3\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons","ColReorder","Scroller"],"data":[["1","2","3","4","5","6"],[0.5,0.5,0.5,0.5,0.5,0.5],[false,false,false,true,true,true],[false,false,false,false,false,false],["rho","rho_km","rho_km_simple","rho","rho_km","rho_km_simple"],["ipw","ipw","ipw","ipw","ipw","ipw"],[false,false,false,false,false,false],[400,400,400,400,400,400],[0.237,0.215,0.237,0.25,0.21,0.25],[0.212,0.212,0.212,0.212,0.212,0.212],[0.026,0.004,0.026,0.038,0.002,0.038],[1.096,1.069,1.096,1.108,1.063,1.108],[1.075,1.075,1.075,1.075,1.075,1.075],[0.022,0.006,0.022,0.033,0.012,0.033],[0.859,0.853,0.859,0.858,0.853,0.858],[0.863,0.863,0.863,0.863,0.863,0.863],[0.004,0.01,0.004,0.005,0.01,0.005]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>xi<\/th>\n      <th>use_propensity<\/th>\n      <th>use_km<\/th>\n      <th>km_rho<\/th>\n      <th>type<\/th>\n      <th>censoring<\/th>\n      <th>n<\/th>\n      <th>x0<\/th>\n      <th>x0_true<\/th>\n      <th>x0_rmse<\/th>\n      <th>x1<\/th>\n      <th>x1_true<\/th>\n      <th>x1_rmse<\/th>\n      <th>diff<\/th>\n      <th>diff_true<\/th>\n      <th>diff_rmse<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"autoWidth":true,"rownames":false,"dom":"Bfrtip","buttons":["colvis","excel"],"colReorder":true,"deferRender":true,"scrollX":true,"scrollY":"40vh","scroller":true,"search":{"regex":true,"caseInsensitive":false},"columnDefs":[{"className":"dt-right","targets":[1,7,8,9,10,11,12,13,14,15,16]},{"orderable":false,"targets":0}],"order":[],"orderClasses":false,"orderCellsTop":true}},"evals":[],"jsHooks":[]}</script>
+</div>
 </div>
 </div>
   </div>
