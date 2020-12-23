@@ -18,5 +18,6 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
-    devtools
+    devtools,
+    ggplot2
 VignetteBuilder: knitr
