@@ -26,8 +26,8 @@ load("../simulation/simu_qte_v4.Rdata")
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width=20,
-  fig.height=20
+  fig.width=14,
+  fig.height=14
 )
 ```
 
