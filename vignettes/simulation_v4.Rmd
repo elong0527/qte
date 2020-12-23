@@ -17,6 +17,7 @@ vignette: |
 
 ```{r, message=FALSE, warning=FALSE}
 library(dplyr)
+library(ggplot2)
 devtools::load_all()
 load("../simulation/simu_qte_v4.Rdata")
 ```
