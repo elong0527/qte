@@ -1,0 +1,157 @@
+---
+title: "simulation-v4"
+output:
+  rmarkdown::html_document: default
+  rmarkdown::html_vignette: default
+vignette: |
+  %\VignetteIndexEntry{simulation-v2} 
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+    body .main-container {
+        max-width: 2000px;
+    }
+</style>
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+devtools::load_all()
+load("../simulation/simu_qte_v4.Rdata")
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=20,
+  fig.height=20
+)
+```
+
+# Simulation Setup 
+
+We conducted simulation studies to verify the validity of the proposed IPW and AIPW estimators. 
+
+Simulation set up 
+
+- Total sample size: `n = 400`
+- Analysis time $L = 1$
+- Covariates $X$ is generated from $\mathcal{N}(0.5, 1)$
+- Treatment group $A$ is generated from $Bernoulli(p)$, where $p=logit^{-1}(-0.25 + 0.5 * x)$ such that the randomization ratio is close to 1:1. 
+- Outcome $Y$ is generated from $\mathcal{N}(\eta, 1)$, where $\eta =  0.4 + 0.8 * A + 0.3 * X$.
+- Death time: $T \sim \exp(\lambda)$, where $\lambda = exp(-2 + 0.5 * X)$ (for a simple Cox PH model)
+- Censoring time: $C \sim \exp(-2 + 0.4 * x)$
+- Observed time: $U = T \wedge C$
+- Event indicator: $\delta = T < C$
+
+- Missing data: `y_obs` in simulated data
+  - $Y$ is missing if $U < L$
+  - we summarize the missing data proportion based on the event indicator. 
+- Actual data: the underline true value of `y_actual` in simulated data 
+  - `y_actual` = $\min(y) - 1$ if $T < L$    
+
+## Example of simulated data
+
+```{r, message = FALSE}
+head(db) %>% select(a, x, y, y_obs, y_actual, event_time, censor_time, obs_time, status, analysis_time) %>% 
+             knitr::kable(digits = 3)
+```
+## Method to calculate true value 
+
+The true value is estimated by `y_actual` without using propensity score and censoring adjustment. 
+
+The sample size to calculate true value is 10,000 with replication of 1,000 times.
+
+We calculate the true value for different `xi` from 0.35 to 0.95. 
+
+```{r}
+est0 %>% knitr::kable(digits = 2)
+```
+
+## Model Estimation
+
+The calculation is within each treatment group
+
+1. Propensity score: Fit a logistic model: `glm(a ~ x, family = "binomial", data = db)`
+1. IPW weight $\pi$: Coxph model: `coxph(Surv(obs_time, 1 - status) ~ x, data = db)` and calculate the probability at the minimal of `obs_time` and `analysis_time`
+1. $F(y\mid x; \theta)$
+  - Fit a linear model based on observed outcome `lm(y_obs ~ x, data = db)`
+  - Calculate the scaled CDF for `f_q`
+  
+```{r, eval = FALSE}
+y_std <- (q - db$y_mean) / db$y_sigma
+rho + (1 - rho) * pnorm(y_std)
+```
+
+1. $R$: `(obs_time > analysis_time) | (obs_time <= analysis_time & status = TRUE)`
+
+## Simulation Setup
+
+- `a`: treatment group
+- `xi` the quantile of interest 
+- `n`: sample size in each group for true value estimation
+- `pct_missing`: Percent of subject with missing value at analysis time $L$
+- `pct_missing_death`: Percent of subject dead on or before analysis time $L$
+- `pct_missing_censor`: Percent of subject censored on or before analysis time $L$
+
+For the IPW part, we considered two types:
+
+- Type 1: same as in formula (5) of the manuscript 
+- Type 2: we calculate the equation based on the formula below. That only use observed data.  
+
+$$\sum \{ I(Y < q) -  \tilde{F}_a(y \mid X)) \} / e(X_i; \alpha)$$
+
+## Missing data and censoring proportion 
+
+```{r}
+meta %>% select(a, n, starts_with("pct")) %>% unique()
+```
+
+## Simulation Results
+
+- `xi` the quantile of interest 
+- `use_propensity`: whether to use propensity score is the estimator equation.
+- `use_km`: whether to use KM estimator to adjust censoring 
+- `km_rho`: method to estimate the probability of death at $L$
+  + `rho`: raw estimator (observed death before $L$) / number of subjects
+  + `rho_km`: estimated from Cox model `coxph(Surv(obs_time, 1 - status) ~ x, data = db)` at time $L$.
+  + `rho_km_simple`: estimated from KM estimator at time $L$.
+- `type`: using `IPW` (formula 5) or `AIPW` (formula 6).
+- `x0`, `x0_true`: estimated or true value for the percentile in control group
+- `x1`, `x1_true`: estimated or true value for the percentile in treatment group
+- `diff`, `diff_true`: estimated or true value for the percentile difference between two group
+
+### Results with observing censoring
+
+All proposed methods performs well under true value. Here we display the results when `xi = 0.5`. 
+```{r}
+est1 %>% ungroup() %>% subset(xi == 0.5 & km_rho == "rho_km") %>%
+  mutate_if(is.numeric, round, 3)  %>% show_db()
+```
+For the results with different `xi`, we summarize the results in figures below
+```{r, echo = FALSE}
+s1
+```
+## Robustness of the estimator 
+
+### Case 1: incorrect outcome regression 
+
+We consider a situation when the outcome regression is not correct. 
+
+The outcome data $Y$ is simulated from `y <- rnorm(n, 0.4 + 0.8 * a + 0.3 * x + x * x2, sd = 1)`, where $X_2 \sim \mathcal{N}(0, 1)$. Everything else are the same. 
+
+```{r, echo = FALSE}
+s4
+```
+
+### Case 2: incorrect propensity score
+
+We consider a situation when the propensity score model is not correct. 
+
+The treatment group is simulated from `prob <- inv_logit(-0.25 + 0.5 * x + x * x2)`, where $X_2 \sim \mathcal{N}(0, 1)$. Everything else are the same. 
+
+```{r, echo = FALSE}
+s3
+```
