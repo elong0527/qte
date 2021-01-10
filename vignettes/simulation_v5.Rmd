@@ -142,22 +142,22 @@ s1
 
 ## Robustness of the estimator 
 
-### Scenario 2: incorrect outcome regression 
+### Scenario 2: Incorrect outcome regression 
 
 We consider a situation when the outcome regression is not correct. 
 
-The outcome data $Y$ is simulated from `y <- rnorm(n, 0.4 + 0.8 * a + 0.3 * x + (x^2 - 0.25), sd = 1)`, where $X_2 \sim \mathcal{N}(0, 1)$. 
+The outcome data $Y$ is simulated from `y <- rnorm(n, 0.4 + 0.8 * a + 0.3 * x + (x^2 - 0.25), sd = 1)`.
 Everything else are the same. 
 
 ```{r, echo = FALSE}
 s2
 ```
 
-### Scenario 3: incorrect propensity score
+### Scenario 3: Incorrect propensity score
 
 We consider a situation when the propensity score model is not correct. 
 
-The treatment group is simulated from `prob <- inv_logit(-0.25 + 0.5 * x + (x^2 - 0.25))`, where $X_2 \sim \mathcal{N}(0, 1)$. Everything else are the same. 
+The treatment group is simulated from `prob <- inv_logit(-0.25 + 0.5 * x + (x^2 - 0.25))`. Everything else are the same. 
 
 ```{r, echo = FALSE}
 s3
