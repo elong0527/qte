@@ -19,5 +19,6 @@ Suggests:
     knitr,
     rmarkdown,
     devtools,
-    ggplot2
+    ggplot2,
+    reactable
 VignetteBuilder: knitr
