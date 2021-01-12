@@ -321,120 +321,120 @@ save(meta, meta_true, res, res_true, file = filename)
 # ----------------------
 # Simulation Summary
 # ----------------------
-library(dplyr)
-
-path <- "/SFS/scratch/zhanyilo/qte6"
-
-result <- list()
-result_true <- list()
-result_meta <- list()
-result_meta_true <- list()
-for(i in 1:1000){
-  try({
-    load(file.path(path, paste0(i, ".Rdata")))
-    result[[i]] <- bind_rows(res, .id = "scenario")
-    result_true[[i]] <- bind_rows(res, .id = "scenario")
-    result_meta[[i]] <- bind_rows(meta, .id = "scenario")
-    # result_meta_true[[i]] <- bind_rows(meta_true .id = "scenario")
-  })
-}
-
-result <- bind_rows(result)
-result_true <- bind_rows(result_true)
-result_meta <- bind_rows(result_meta)
-
-# Meta information
-result_meta <- result_meta %>% select(- xi, -q, -diff) %>%
-  group_by(scenario, a) %>%
-  summarise_all(mean)
-
-# True value
-est0 <- result_true %>% group_by(scenario, xi) %>%
-  summarise(x0_true = mean(x0), x1_true = mean(x1), diff_true = mean(diff))
-
-summary_est <- function(db){
-  db %>% left_join(est0) %>%
-    group_by(scenario, n, xi, km_rho, type) %>%
-    summarise(x0 = mean(x0), x0_true = mean(x0_true), x0_bias = x0 - x0_true, x0_rmse = sqrt(mean(x0 - x0_true)^2),
-              x1 = mean(x1), x1_true = mean(x1_true), x1_bias = x1 - x1_true, x1_rmse = sqrt(mean(x1 - x1_true)^2),
-              diff = mean(diff), diff_true = mean(diff_true), diff_bias = diff - diff_true, diff_rmse = sqrt(mean(diff - diff_true)^2))
-}
-
-est1 <- result %>%  summary_est()
-
-#### Visualization
-library(ggplot2)
-library(tidyr)
-
-g_summary <- function(db, scales){
-  est <- db %>% select(- ends_with("true"), - ends_with("rmse")) %>% pivot_longer(cols = c("x0", "x1", "diff"))
-  est_true <- db %>% select(- ends_with(c("x0", "x1", "diff")), - ends_with("rmse")) %>%
-    pivot_longer(cols = c("x0_true", "x1_true", "diff_true"), values_to = "truth") %>%
-    mutate(name = gsub("_true", "", name))
-  est <- left_join(est, est_true)
-  rmse <- db %>% select(- ends_with("true"), - ends_with(c("x0", "x1", "diff"))) %>% pivot_longer(cols = ends_with("rmse"))
-  bias <- db %>% select(- ends_with("true"), - ends_with(c("x0", "x1", "diff"))) %>% pivot_longer(cols = ends_with("bias"))
-
-
-  g_est <- ggplot(data = est ) +
-    geom_point(aes(x = xi, y = value, group = type, color = type)) +
-    geom_line(aes(x = xi, y = truth)) +
-    facet_grid(name ~ km_rho, scales = scales) +
-    ylab("Estimation") +
-    theme_bw()
-
-  g_rmse <- ggplot(data = rmse ) +
-    geom_point(aes(x = xi, y = value, group = type, color = type)) +
-    facet_grid(name ~ km_rho, scales = scales) +
-    ylab("RMSE") +
-    theme_bw()
-
-  g_bias <- ggplot(data = bias ) +
-    geom_point(aes(x = xi, y = value, group = type, color = type)) +
-    facet_grid(name ~ km_rho, scales = scales) +
-    ylab("BIAS") +
-    theme_bw()
-
-  list(g_est = g_est, g_rmse = g_rmse, g_bias = g_bias)
-}
-
-g1 <- subset(est1, scenario == 1) %>% g_summary(scales = "free")
-g2 <- subset(est1, scenario == 2) %>% g_summary(scales = "free")
-g3 <- subset(est1, scenario == 3) %>% g_summary(scales = "free")
-g4 <- subset(est1, scenario == 4) %>% g_summary(scales = "free")
-
-
-
-g_summary2 <- function(db){
-
-  est <- db %>% subset(km_rho == "rho_km") %>% pivot_longer(cols = x0:diff_rmse) %>%
-    separate(name, c("var", "metric")) %>%
-    mutate(metric = ifelse(is.na(metric), "est", metric)) %>%
-    subset(metric != "true") %>%
-    mutate(metric = factor(metric, levels = c("est", "bias", "rmse")))
-
-  est_true <- db %>% select(- ends_with(c("x0", "x1", "diff")), - ends_with("rmse"), - ends_with("bias")) %>%
-    pivot_longer(cols = c("x0_true", "x1_true", "diff_true"), values_to = "truth") %>%
-    mutate(name = gsub("_true", "", name)) %>%
-    rename(var = name)
-  est <- left_join(est, est_true)
-
-  g <- ggplot(data = est) +
-    geom_line(aes(x = xi, y = value, group = type, color = type)) +
-    geom_line(aes(x = xi, y = truth, group = type), data = subset(est, metric == "est")) +
-    facet_wrap(metric ~ var, scales = "free") +
-    ylab("Metric Value") +
-    theme_bw() +
-    scale_color_brewer(palette="Dark2")
-
-  g
-}
-
-
-s1 <- subset(est1, scenario == 1) %>% g_summary2()
-s2 <- subset(est1, scenario == 2) %>% g_summary2()
-s3 <- subset(est1, scenario == 3) %>% g_summary2()
-s4 <- subset(est1, scenario == 4) %>% g_summary2()
-
-db <- simu_data(400)
-save(result_meta, est0, est1, db, g1, g2, g3, g4, s1, s2, s3, s4, file = "simulation/simu_qte_v6.Rdata")
+# library(dplyr)
+#
+# path <- "/SFS/scratch/zhanyilo/qte6"
+#
+# result <- list()
+# result_true <- list()
+# result_meta <- list()
+# result_meta_true <- list()
+# for(i in 1:1000){
+#   try({
+#     load(file.path(path, paste0(i, ".Rdata")))
+#     result[[i]] <- bind_rows(res, .id = "scenario")
+#     result_true[[i]] <- bind_rows(res, .id = "scenario")
+#     result_meta[[i]] <- bind_rows(meta, .id = "scenario")
+#     # result_meta_true[[i]] <- bind_rows(meta_true .id = "scenario")
+#   })
+# }
+#
+# result <- bind_rows(result)
+# result_true <- bind_rows(result_true)
+# result_meta <- bind_rows(result_meta)
+#
+# # Meta information
+# result_meta <- result_meta %>% select(- xi, -q, -diff) %>%
+#   group_by(scenario, a) %>%
+#   summarise_all(mean)
+#
+# # True value
+# est0 <- result_true %>% group_by(scenario, xi) %>%
+#   summarise(x0_true = mean(x0), x1_true = mean(x1), diff_true = mean(diff))
+#
+# summary_est <- function(db){
+#   db %>% left_join(est0) %>%
+#     group_by(scenario, n, xi, km_rho, type) %>%
+#     summarise(x0 = mean(x0), x0_true = mean(x0_true), x0_bias = x0 - x0_true, x0_rmse = sqrt(mean(x0 - x0_true)^2),
+#               x1 = mean(x1), x1_true = mean(x1_true), x1_bias = x1 - x1_true, x1_rmse = sqrt(mean(x1 - x1_true)^2),
+#               diff = mean(diff), diff_true = mean(diff_true), diff_bias = diff - diff_true, diff_rmse = sqrt(mean(diff - diff_true)^2))
+# }
+#
+# est1 <- result %>%  summary_est()
+#
+# #### Visualization
+# library(ggplot2)
+# library(tidyr)
+#
+# g_summary <- function(db, scales){
+#   est <- db %>% select(- ends_with("true"), - ends_with("rmse")) %>% pivot_longer(cols = c("x0", "x1", "diff"))
+#   est_true <- db %>% select(- ends_with(c("x0", "x1", "diff")), - ends_with("rmse")) %>%
+#     pivot_longer(cols = c("x0_true", "x1_true", "diff_true"), values_to = "truth") %>%
+#     mutate(name = gsub("_true", "", name))
+#   est <- left_join(est, est_true)
+#   rmse <- db %>% select(- ends_with("true"), - ends_with(c("x0", "x1", "diff"))) %>% pivot_longer(cols = ends_with("rmse"))
+#   bias <- db %>% select(- ends_with("true"), - ends_with(c("x0", "x1", "diff"))) %>% pivot_longer(cols = ends_with("bias"))
+#
+#
+#   g_est <- ggplot(data = est ) +
+#     geom_point(aes(x = xi, y = value, group = type, color = type)) +
+#     geom_line(aes(x = xi, y = truth)) +
+#     facet_grid(name ~ km_rho, scales = scales) +
+#     ylab("Estimation") +
+#     theme_bw()
+#
+#   g_rmse <- ggplot(data = rmse ) +
+#     geom_point(aes(x = xi, y = value, group = type, color = type)) +
+#     facet_grid(name ~ km_rho, scales = scales) +
+#     ylab("RMSE") +
+#     theme_bw()
+#
+#   g_bias <- ggplot(data = bias ) +
+#     geom_point(aes(x = xi, y = value, group = type, color = type)) +
+#     facet_grid(name ~ km_rho, scales = scales) +
+#     ylab("BIAS") +
+#     theme_bw()
+#
+#   list(g_est = g_est, g_rmse = g_rmse, g_bias = g_bias)
+# }
+#
+# g1 <- subset(est1, scenario == 1) %>% g_summary(scales = "free")
+# g2 <- subset(est1, scenario == 2) %>% g_summary(scales = "free")
+# g3 <- subset(est1, scenario == 3) %>% g_summary(scales = "free")
+# g4 <- subset(est1, scenario == 4) %>% g_summary(scales = "free")
+#
+#
+#
+# g_summary2 <- function(db){
+#
+#   est <- db %>% subset(km_rho == "rho_km") %>% pivot_longer(cols = x0:diff_rmse) %>%
+#     separate(name, c("var", "metric")) %>%
+#     mutate(metric = ifelse(is.na(metric), "est", metric)) %>%
+#     subset(metric != "true") %>%
+#     mutate(metric = factor(metric, levels = c("est", "bias", "rmse")))
+#
+#   est_true <- db %>% select(- ends_with(c("x0", "x1", "diff")), - ends_with("rmse"), - ends_with("bias")) %>%
+#     pivot_longer(cols = c("x0_true", "x1_true", "diff_true"), values_to = "truth") %>%
+#     mutate(name = gsub("_true", "", name)) %>%
+#     rename(var = name)
+#   est <- left_join(est, est_true)
+#
+#   g <- ggplot(data = est) +
+#     geom_line(aes(x = xi, y = value, group = type, color = type)) +
+#     geom_line(aes(x = xi, y = truth, group = type), data = subset(est, metric == "est")) +
+#     facet_wrap(metric ~ var, scales = "free") +
+#     ylab("Metric Value") +
+#     theme_bw() +
+#     scale_color_brewer(palette="Dark2")
+#
+#   g
+# }
+#
+#
+# s1 <- subset(est1, scenario == 1 & type %in% c("ipw1", "aipw1", "or")) %>% g_summary2()
+# s2 <- subset(est1, scenario == 2 & type %in% c("ipw1", "aipw1", "or")) %>% g_summary2()
+# s3 <- subset(est1, scenario == 3 & type %in% c("ipw1", "aipw1", "or")) %>% g_summary2()
+# s4 <- subset(est1, scenario == 4 & type %in% c("ipw1", "aipw1", "or")) %>% g_summary2()
+#
+# db <- simu_data(400)
+# save(result_meta, est0, est1, db, g1, g2, g3, g4, s1, s2, s3, s4, file = "simulation/simu_qte_v6.Rdata")

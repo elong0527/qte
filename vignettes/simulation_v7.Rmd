@@ -1,0 +1,76 @@
+---
+title: "simulation-v7"
+output:
+  rmarkdown::html_document: default
+  rmarkdown::html_vignette: default
+vignette: |
+  %\VignetteIndexEntry{simulation-v2} 
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+    body .main-container {
+        max-width: 2000px;
+    }
+</style>
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+devtools::load_all()
+load("../simulation/simu_qte_v7.Rdata")
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=14,
+  fig.height=14
+)
+```
+
+# Additional Simulation Results for Difference Censoring Proportion
+
+We further evaluate the performance of the proposed method under different censoring proportion. All set up are the same as in simultion_v5.Rmd report except 
+the intercept of the censoring distribution. 
+
+## Missing data and censoring proportion 
+
+```{r}
+result_meta %>% subset(scenario != 4) %>% mutate_if(is.numeric, round, digits = 1) %>% show_db()
+```
+
+
+## S1
+
+- S1: Censoring time: $C \sim \exp(-2 + 0.8 * x)$
+
+```{r, echo = FALSE}
+s1
+```
+
+## S2
+
+- S2: Censoring time: $C \sim \exp(-2 + 1 * x)$
+
+```{r, echo = FALSE}
+s2
+```
+
+## S3
+
+- S3: Censoring time: $C \sim \exp(-2 + 2 * x)$
+
+```{r, echo = FALSE}
+s3
+```
+
+## S4
+
+- S4: Censoring time: $C \sim \exp(-2 + 3 * x)$
+
+```{r, echo = FALSE}
+s4
+```
